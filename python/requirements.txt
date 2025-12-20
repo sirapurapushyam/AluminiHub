@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+pymongo
+sentence-transformers
+scikit-learn
+requests
+PyPDF2
+docx2txt
+python-multipart
+python-dotenv
