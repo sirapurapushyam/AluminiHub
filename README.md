@@ -1,6 +1,6 @@
-# 🎓 AlumniHub --- Centralized Digital Alumni Management Platform
+# AlumniHub --- Centralized Digital Alumni Management Platform
 
-## 🧩 Overview
+## Overview
 
 **AlumniHub** is a **scalable MERN + FastAPI platform** designed to
 streamline alumni engagement, analytics, and communication.\
@@ -10,7 +10,7 @@ and mentorship activities efficiently.
 
 ------------------------------------------------------------------------
 
-## 🚀 How It Works
+## How It Works
 
 AlumniHub is a **cloud-deployable** digital dashboard enabling
 centralized alumni management across institutions.\
@@ -34,7 +34,7 @@ AI-powered recommendations, and ATS resume analysis**.
 
 ------------------------------------------------------------------------
 
-## 🗂 Project Structure
+## Project Structure
 
 ``` bash
 alumnihub/
@@ -57,35 +57,35 @@ alumnihub/
 
 ------------------------------------------------------------------------
 
-## ⚙️ Functional Workflows
+## Functional Workflows
 
-### 1️⃣ College Onboarding
+### College Onboarding
 
 1.  Dean/college officer registers.
 2.  Superadmin reviews & approves.
 3.  College code is generated and emailed.
 
-### 2️⃣ User Registration & Approval
+### User Registration & Approval
 
 1.  Students, Alumni, Faculty sign up using the college code.
 2.  College Admin approves or denies users.
 
-### 3️⃣ Role-Based Dashboards
+### Role-Based Dashboards
 
 Each user role has customized access, analytics, and workflows.
 
 ------------------------------------------------------------------------
 
-## 🤖 AI Integrations (FastAPI Microservice)
+## AI Integrations (FastAPI Microservice)
 
-### ✳️ ATS Resume Score Checker
+###  ATS Resume Score Checker
 
 -   Uses **Sentence-Transformers + Scikit-Learn**.
 -   Extracts keywords and computes similarity.
 -   Returns ATS score (0--100).
 
 
-### 💡 Mentor Recommendation System
+### Mentor Recommendation System
 
 -   Uses **semantic similarity** to match students with mentors.
 -   Returns **Top 10 recommended alumni mentors**.
@@ -93,7 +93,7 @@ Each user role has customized access, analytics, and workflows.
 
 ------------------------------------------------------------------------
 
-## 💰 Donation Module
+## Donation Module
 
 -   Alumni can pledge donations to specific causes.
 -   Faculty and Admins can track donations.
@@ -101,7 +101,7 @@ Each user role has customized access, analytics, and workflows.
 
 ------------------------------------------------------------------------
 
-## 🧮 Database Overview
+## Database Overview
 
   Collection           Description
   -------------------- -------------------------------
@@ -117,13 +117,13 @@ Each user role has customized access, analytics, and workflows.
 
 ------------------------------------------------------------------------
 
-## 🔐 Authentication
+## Authentication
 
 JWT-based middleware storing role and collegeCode.
 
 ------------------------------------------------------------------------
 
-## 📨 Email Workflows
+## Email Workflows
 
 -   **Superadmin → College Admin** for approval and codes.\
 -   **College Admin → Users** for account activation.\
@@ -131,7 +131,7 @@ JWT-based middleware storing role and collegeCode.
 
 ------------------------------------------------------------------------
 
-## 💻 Frontend Structure
+## Frontend Structure
 
 ``` bash
 src/
@@ -160,7 +160,7 @@ src/
 
 ------------------------------------------------------------------------
 
-## ☁️ Deployment Workflow
+## Deployment Workflow
 
   Component         Suggested Platform
   ----------------- ----------------------------------
@@ -226,7 +226,7 @@ DBNAME=
 
 ------------------------------------------------------------------------
 
-## 🧑‍💻 Setup & Run Instructions
+## Setup & Run Instructions
 
 ### Clone Repository
 
@@ -270,7 +270,7 @@ uvicorn app:app --reload --port 8001
 
 ------------------------------------------------------------------------
 
-## 📊 Analytics & Insights
+## Analytics & Insights
 
 -   **Superadmin:** National analytics, college growth.
 -   **Admin:** Year-wise stats, donations, and events.
@@ -278,7 +278,7 @@ uvicorn app:app --reload --port 8001
 
 ------------------------------------------------------------------------
 
-## ✅ Workflow Summary
+## Workflow Summary
 
   Step   Action                   Result
   ------ ------------------------ ------------------------
@@ -293,7 +293,7 @@ uvicorn app:app --reload --port 8001
 
 ------------------------------------------------------------------------
 
-## 📚 In Short
+## In Short
 
 **AlumniHub** enables: - Dynamic multi-college onboarding\
 - Role-based dashboards\
