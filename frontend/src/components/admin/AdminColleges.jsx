@@ -99,9 +99,9 @@ const AdminColleges = () => {
 
   const tabs = [
     { id: 'all', label: 'All Colleges', count: data?.colleges?.length || 0, color: 'gray' },
-    { id: 'pending', label: 'Pending', count: data?.colleges?.filter(c => c.status === 'pending').length || 0, color: 'yellow' },
     { id: 'approved', label: 'Approved', count: data?.colleges?.filter(c => c.status === 'approved').length || 0, color: 'green' },
-    { id: 'rejected', label: 'Rejected', count: data?.colleges?.filter(c => c.status === 'rejected').length || 0, color: 'red' },
+    { id: 'pending', label: 'Pending', count: data?.colleges?.filter(c => c.status === 'pending').length || 0, color: 'yellow' },
+    // { id: 'rejected', label: 'Rejected', count: data?.colleges?.filter(c => c.status === 'rejected').length || 0, color: 'red' },
   ]
 
   if (isLoading && !data) return <LoadingSpinner size="large" />

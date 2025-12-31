@@ -37,7 +37,7 @@ useEffect(() => {
 }, [filterRole, filterStatus, debouncedSearchTerm])
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ['adminUsers', user.collegeCode, filterRole, debouncedSearchTerm],
+    queryKey: ['adminUsers', user.collegeCode, filterRole, debouncedSearchTerm,page],
    queryFn: async () => {
   const params = new URLSearchParams()
 
