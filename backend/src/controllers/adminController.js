@@ -105,49 +105,171 @@ const adminController = {
   },
 
   // Get all colleges
-  async getAllColleges(req, res) {
-    try {
-      const { status, search, page = 1, limit = 20 } = req.query;
-      const { skip, limit: limitNum, page: pageNum } = getPaginationParams(page, limit);
+  // async getAllColleges(req, res) {
+  //   try {
+  //     const { status, search, page = 1, limit = 20 } = req.query;
+  //     const { skip, limit: limitNum, page: pageNum } = getPaginationParams(page, limit);
       
-      const query = {};
+  //     const query = {};
 
-      if (status && status !== 'all') {
-        query.status = status;
-      }
+  //     if (status && status !== 'all') {
+  //       query.status = status;
+  //     }
 
-      if (search) {
-        query.$or = [
-          { name: { $regex: search, $options: 'i' } },
-          { uniqueCode: { $regex: search, $options: 'i' } },
-          { email: { $regex: search, $options: 'i' } }
-        ];
-      }
+  //     if (search) {
+  //       query.$or = [
+  //         { name: { $regex: search, $options: 'i' } },
+  //         { uniqueCode: { $regex: search, $options: 'i' } },
+  //         { email: { $regex: search, $options: 'i' } }
+  //       ];
+  //     }
 
-      const colleges = await College.find(query)
-        .populate('adminUser', 'firstName lastName email')
-        .skip(skip)
-        .limit(limitNum)
-        .sort({ createdAt: -1 });
+  //     const colleges = await College.find(query)
+  //       .populate('adminUser', 'firstName lastName email')
+  //       .skip(skip)
+  //       .limit(limitNum)
+  //       .sort({ createdAt: -1 });
 
-      const total = await College.countDocuments(query);
+  //     const total = await College.countDocuments(query);
 
-      res.json({ 
-        success: true,
-        colleges, 
-        pagination: {
-          page: pageNum,
-          limit: limitNum,
-          total,
-          pages: Math.ceil(total / limitNum)
-        }
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Failed to fetch colleges' });
+  //     res.json({ 
+  //       success: true,
+  //       colleges, 
+  //       pagination: {
+  //         page: pageNum,
+  //         limit: limitNum,
+  //         total,
+  //         pages: Math.ceil(total / limitNum)
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ success: false, message: 'Failed to fetch colleges' });
+  //   }
+  // },
+async getAllColleges(req, res) {
+  try {
+    const { status, search, page = 1, limit = 20 } = req.query;
+    const { skip, limit: limitNum, page: pageNum } = getPaginationParams(page, limit);
+
+    const query = {};
+    if (status && status !== 'all') query.status = status;
+
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { uniqueCode: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } }
+      ];
     }
-  },
 
+    const colleges = await College.aggregate([
+      { $match: query },
+
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'uniqueCode',
+          foreignField: 'collegeCode',
+          as: 'users'
+        }
+      },
+
+      {
+  $addFields: {
+    stats: {
+      totalStudents: {
+        $size: {
+          $filter: {
+            input: '$users',
+            cond: {
+              $and: [
+                { $eq: ['$$this.role', 'student'] },
+                { $eq: ['$$this.approvalStatus', 'approved'] }
+              ]
+            }
+          }
+        }
+      },
+      totalAlumni: {
+        $size: {
+          $filter: {
+            input: '$users',
+            cond: {
+              $and: [
+                { $eq: ['$$this.role', 'alumni'] },
+                { $eq: ['$$this.approvalStatus', 'approved'] }
+              ]
+            }
+          }
+        }
+      },
+      totalFaculty: {
+        $size: {
+          $filter: {
+            input: '$users',
+            cond: {
+              $and: [
+                { $eq: ['$$this.role', 'faculty'] },
+                { $eq: ['$$this.approvalStatus', 'approved'] }
+              ]
+            }
+          }
+        }
+      },
+      totalAdmins: {
+        $size: {
+          $filter: {
+            input: '$users',
+            cond: {
+              $and: [
+                { $eq: ['$$this.role', 'college_admin'] },
+                { $eq: ['$$this.approvalStatus', 'approved'] }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+},
+
+     {
+  $addFields: {
+    'stats.totalUsers': {
+      $add: [
+        '$stats.totalStudents',
+        '$stats.totalAlumni',
+        '$stats.totalFaculty',
+        '$stats.totalAdmins'
+      ]
+    }
+  }
+},
+
+      { $project: { users: 0 } },
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limitNum }
+    ]);
+
+    const total = await College.countDocuments(query);
+
+    res.json({
+      success: true,
+      colleges,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        pages: Math.ceil(total / limitNum)
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Failed to fetch colleges' });
+  }
+},
   // Get platform statistics
   async getPlatformStats(req, res) {
     try {

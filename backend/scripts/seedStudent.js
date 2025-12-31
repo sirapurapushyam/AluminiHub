@@ -60,7 +60,7 @@ async function seedStudents() {
         email,
         password: 'Demo@1234', // hashed automatically
         role: 'student',
-        collegeCode: 'DEMFYH',
+        collegeCode: 'DEMZW7',
         college: collegeId,
         department: 'CSE',
         course: 'BTech',

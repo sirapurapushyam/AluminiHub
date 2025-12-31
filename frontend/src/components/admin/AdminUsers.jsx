@@ -9,6 +9,8 @@ import { debounce } from 'lodash' // or implement your own debounce
 
 const AdminUsers = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const limit = 20
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState('all')
   const [filterStatus, setFilterStatus] = useState('all')
@@ -17,6 +19,7 @@ const AdminUsers = () => {
   const [loadingUser, setLoadingUser] = useState(false)
   const queryClient = useQueryClient()
   const { user } = useAuth()
+  
 
   // Debounce search term
   const debouncedSearch = useCallback(
@@ -29,17 +32,28 @@ const AdminUsers = () => {
   useEffect(() => {
     debouncedSearch(searchTerm)
   }, [searchTerm, debouncedSearch])
+useEffect(() => {
+  setPage(1)
+}, [filterRole, filterStatus, debouncedSearchTerm])
 
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ['adminUsers', user.collegeCode, filterRole, debouncedSearchTerm],
-    queryFn: async () => {
-      const params = new URLSearchParams()
-      if (filterRole !== 'all') params.append('role', filterRole)
-      if (debouncedSearchTerm) params.append('search', debouncedSearchTerm)
-      
-      const response = await api.get(`/users/college/${user.collegeCode}?${params}`)
-      return response.data
-    },
+   queryFn: async () => {
+  const params = new URLSearchParams()
+
+  if (filterRole !== 'all') params.append('role', filterRole)
+  if (debouncedSearchTerm) params.append('search', debouncedSearchTerm)
+
+  params.append('page', page)
+  params.append('limit', limit)
+
+  const response = await api.get(
+    `/users/college/${user.collegeCode}?${params.toString()}`
+  )
+
+  return response.data
+},
+
     keepPreviousData: true, // Keep showing old data while fetching new
   })
 
@@ -108,8 +122,9 @@ const AdminUsers = () => {
             <div>
               <p className="text-sm text-yellow-600">Pending</p>
               <p className="text-2xl font-bold text-yellow-700">
-                {data?.users?.filter(u => u.approvalStatus === 'pending').length || 0}
-              </p>
+  {data?.approvalStats?.pending || 0}
+</p>
+
             </div>
             <UserX className="w-8 h-8 text-yellow-600" />
           </div>
@@ -119,8 +134,9 @@ const AdminUsers = () => {
             <div>
               <p className="text-sm text-green-600">Approved</p>
               <p className="text-2xl font-bold text-green-700">
-                {data?.users?.filter(u => u.approvalStatus === 'approved').length || 0}
-              </p>
+  {data?.approvalStats?.approved || 0}
+</p>
+
             </div>
             <UserCheck className="w-8 h-8 text-green-600" />
           </div>
@@ -130,8 +146,9 @@ const AdminUsers = () => {
             <div>
               <p className="text-sm text-red-600">Rejected</p>
               <p className="text-2xl font-bold text-red-700">
-                {data?.users?.filter(u => u.approvalStatus === 'rejected').length || 0}
-              </p>
+  {data?.approvalStats?.rejected || 0}
+</p>
+
             </div>
             <UserX className="w-8 h-8 text-red-600" />
           </div>
@@ -141,8 +158,9 @@ const AdminUsers = () => {
             <div>
               <p className="text-sm text-blue-600">Total Users</p>
               <p className="text-2xl font-bold text-blue-700">
-                {data?.users?.length || 0}
-              </p>
+  {data?.pagination?.total || 0}
+</p>
+
             </div>
             <User className="w-8 h-8 text-blue-600" />
           </div>
@@ -304,6 +322,29 @@ const AdminUsers = () => {
           </table>
         </div>
       </div>
+{data?.pagination && data.pagination.pages > 1 && (
+  <div className="flex justify-end items-center gap-4 mt-4">
+    <button
+      className="px-3 py-1 border rounded disabled:opacity-50"
+      disabled={page === 1}
+      onClick={() => setPage(p => p - 1)}
+    >
+      Prev
+    </button>
+
+    <span className="text-sm text-gray-600">
+      Page {data.pagination.page} of {data.pagination.pages}
+    </span>
+
+    <button
+      className="px-3 py-1 border rounded disabled:opacity-50"
+      disabled={page === data.pagination.pages}
+      onClick={() => setPage(p => p + 1)}
+    >
+      Next
+    </button>
+  </div>
+)}
 
       {/* User Details Modal */}
       {showUserModal && selectedUser && (

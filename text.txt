@@ -1,0 +1,7 @@
+superadmin : admin@demo.com
+password : demo123456
+
+
+college: demodean@gmail.com
+password: democollege
+

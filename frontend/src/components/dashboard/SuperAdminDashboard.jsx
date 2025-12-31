@@ -103,8 +103,8 @@ const SuperAdminDashboard = () => {
 
       {/* System Management Grid */}
       <section>
-        <h2 className="text-2xl font-semibold mb-6">System Management</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 className="text-2xl font-semibold mb-6">College Management</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
           <Link 
             to="/admin/colleges" 
             className="card hover:shadow-xl transition-all group"
@@ -132,7 +132,7 @@ const SuperAdminDashboard = () => {
             </div>
           </Link>
 
-          <Link 
+          {/* <Link 
             to="/admin/platform-analytics" 
             className="card hover:shadow-xl transition-all group"
           >
@@ -150,9 +150,9 @@ const SuperAdminDashboard = () => {
                 </div>
               </div>
             </div>
-          </Link>
+          </Link> */}
 
-          <Link 
+          {/* <Link 
             to="/admin/system-settings" 
             className="card hover:shadow-xl transition-all group"
           >
@@ -170,7 +170,7 @@ const SuperAdminDashboard = () => {
                 </div>
               </div>
             </div>
-          </Link>
+          </Link> */}
         </div>
       </section>
 

@@ -120,6 +120,20 @@ async getCollegeUsers(req, res) {
       .skip((page - 1) * limit);
 
     const total = await User.countDocuments(query);
+    const statusCounts = await User.aggregate([
+  { $match: query },
+  {
+    $group: {
+      _id: '$approvalStatus',
+      count: { $sum: 1 }
+    }
+  }
+])
+
+const approvalStats = { pending: 0, approved: 0, rejected: 0 }
+statusCounts.forEach(s => {
+  approvalStats[s._id] = s.count
+})
 
     res.json({
       success: true,
@@ -128,7 +142,8 @@ async getCollegeUsers(req, res) {
         page: parseInt(page),
         pages: Math.ceil(total / limit),
         total
-      }
+      },
+      approvalStats
     });
   } catch (error) {
     console.error(error);

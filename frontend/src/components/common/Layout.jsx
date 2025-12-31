@@ -52,7 +52,7 @@ const Layout = ({ children }) => {
     if (isAdmin) {
       return [
         { icon: Home, label: 'Dashboard', path: '/dashboard' },
-        { icon: Shield, label: 'Admin Panel', path: '/admin' },
+        { icon: Shield, label: 'Admin Panel', path: '/admin/users' },
         { icon: Calendar, label: 'Events', path: '/events' },
         { icon: Briefcase, label: 'Jobs', path: '/jobs' },
         { icon: Users, label: 'Directory', path: '/directory' },

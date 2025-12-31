@@ -106,7 +106,7 @@ const CollegeAdminDashboard = ({ user }) => {
       {/* Quick Actions */}
       <section>
         <h2 className="text-2xl font-semibold mb-6">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Link 
             to="/admin/users" 
             className="card hover:shadow-xl transition-all group"
@@ -147,7 +147,7 @@ const CollegeAdminDashboard = ({ user }) => {
             </div>
           </Link>
 
-          <Link 
+          {/* <Link 
             to="/admin/analytics" 
             className="card hover:shadow-xl transition-all group"
           >
@@ -162,7 +162,7 @@ const CollegeAdminDashboard = ({ user }) => {
                 </p>
               </div>
             </div>
-          </Link>
+          </Link> */}
 
           <Link 
             to="/support" 

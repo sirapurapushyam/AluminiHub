@@ -131,29 +131,35 @@ async login(req, res) {
       });
     }
 
-    const isPasswordValid = await user.comparePassword(password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Invalid email or password' 
-      });
-    }
+   const isPasswordValid = await user.comparePassword(password);
+if (!isPasswordValid) {
+  return res.status(401).json({ 
+    success: false, 
+    message: 'Invalid email or password' 
+  });
+}
+// ✅ APPROVAL CHECK
+if (user.role !== 'super_admin' && user.approvalStatus !== 'approved') {
+  return res.status(403).json({ 
+    success: false,
+    message: user.approvalStatus === 'rejected' 
+      ? 'Your account has been rejected' 
+      : 'Your account is pending approval'
+  });
+}
 
-    if (user.role !== 'super_admin' && user.approvalStatus !== 'approved') {
-      return res.status(403).json({ 
-        success: false,
-        message: user.approvalStatus === 'rejected' 
-          ? 'Your account has been rejected' 
-          : 'Your account is pending approval'
-      });
-    }
+// 🔥 ADD THESE 2 LINES (THIS IS THE FIX)
+user.lastLogin = new Date();
+await user.save();
 
-    const token = generateToken(user._id);
-    res.json({
-      success: true,
-      token,
-      user: sanitizeUser(user)
-    });
+// ✅ TOKEN GENERATION
+const token = generateToken(user._id);
+
+res.json({
+  success: true,
+  token,
+  user: sanitizeUser(user)
+});
   } catch (error) {
     console.error(error);
     res.status(500).json({ 
